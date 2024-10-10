@@ -1,0 +1,390 @@
+# Date: October 04, 2024
+# Author: Dennis Qin
+# Description: This program is designed to bring the user on an adventure through a castle to collect coins and eventually escape the castle
+
+import time
+
+# Introduction to the game
+
+print("You have found yourself trapped in a dungeon with 2 open doors in front of you.")
+time.sleep(1.5)
+print("A note on the wall reads: You must collect 4 gold coins and find the secret exit to escape ")
+time.sleep(1.5)
+
+# Counters needed for different puzzles throughout the code
+
+gold_coin_counter = 0
+numberpad_failures = 0
+
+# defining the main function that encapsules the whole code
+
+def main_input():
+
+    row0_input = input("\nChoose a door to go through: [Door 1]/[Door 2]: ")
+    
+    if row0_input == "door 1":
+        time.sleep(1.5)
+        row1_option1()
+    elif row0_input == "door 2":
+        time.sleep(1.5)
+        row1_option2()
+    else:
+        print ("\nYou should choose a door.")
+        return main_input()
+    
+# creating a function to determine the next rooms after main_input function, door 1.
+
+def row1_option1():
+
+    # dialouge text
+
+    print("\nAs you walk through the door, you notice a guard. He notices you too and he begins to run towards you")
+    time.sleep(1.5)
+
+    # progarm to prompt the user to choose another room
+    def choosing_room():
+        row1_input1 = input("QUICK! Choose a door on your [left] or [right] before he catches you: ")
+        if row1_input1 == 'left':
+            row2_option1()
+        elif row1_input1 == 'right':
+            row2_option2()
+        else:
+            print("Choose one of the rooms")
+            return choosing_room()
+    choosing_room()
+
+# creating a function to determine the next rooms after main_input function, door 2.
+
+def row1_option2():
+
+    # dialouge text
+
+    print("\nThe lights get significantly dimmer as you enter the next room.")
+    time.sleep(1.5)
+    print("As you enter the next room you notice a number pad.")
+    time.sleep(1.5)
+    print("There are 9 digits ranging from 1-9 and you are only able to type in 1 number.")
+    time.sleep(1.5)
+    
+    # creating a function for the numberpad
+
+    def numberpad():
+        global numberpad_failures
+        row1_input2 =  int(input("\nGuess the single number needed to open the door: "))
+
+        # if statements used to determine if the user the correct number (4)
+
+        if numberpad_failures == 2:
+            time.sleep(0.5)
+            print("\nThe numberpad short circuits and you go unconcious. You find yourself back at the start.")
+            time.sleep(1.5)
+            numberpad_failures = 0
+            return main_input()
+        elif row1_input2 == 4:
+            print("\nThe door opens and reveals 2 doorways to choose from")
+            time.sleep(1.5)
+
+        # defining a function to allow the user to go to the next rooms after solving the puzzle
+
+            def room_chooser3():  
+                row1_input3 = input ("\nChoose to go [left] or [right]: ")
+                if row1_input3 == 'left':
+                    row2_option3()
+                elif row1_input3 == 'right':
+                    row2_option4()  
+                else:
+                    return room_chooser3()
+            room_chooser3()
+        elif row1_input2 > 4:
+            print("ERROR! Try a lower number")
+            numberpad_failures += 1
+            time.sleep(1.5)
+            return numberpad()
+        elif row1_input2 < 4: 
+            print("ERROR! Try a larger number")
+            numberpad_failures += 1
+            time.sleep(1.5)
+            return numberpad()
+        else:
+            print("ERROR! Type a number between 1-9")
+            time.sleep(1.5)
+            return numberpad()
+
+    numberpad()
+
+# creating a function to determine the next rooms after row1_option1, left door.
+
+def row2_option1():
+    
+    # dialouge text
+
+    print("\nYou quickly run into the room on your left and shut the door on the guard.")
+    time.sleep(1.5)
+    print("You notice 3 levers on the ground that can unlock the next door. You assume that only one of them is the right one. Choose carefully")
+    
+    # creating a function for the lever game
+
+    def levers():
+        row2_input1 = input("\n[lever 1] [lever 2] [lever 3]: ")
+        if row2_input1 == 'lever 1':
+            print("You choose the wrong lever, a gas fills the room and you find yourself at the start")
+            return main_input()
+        elif row2_input1 == 'lever 2':
+            def room_chooser5():
+                print("\nAs you move the lever, the door reveals another corridor breaking up into 2 sections.")
+                time.sleep(1.5)
+                room_choose2 = input("Choose the [left] or [right] section of the corridor: ")
+                if room_choose2 == 'left':
+                    row3_option1()
+                elif room_choose2 == 'right':
+                    row3_option2()
+            room_chooser5()
+        elif row2_input1 == 'lever 3':
+            print("You choose the wrong lever, a gas fills the room and you find yourself at the start")
+            return main_input()
+        else:
+            print("Choose one of the levers listed above")
+            time.sleep(1.5)
+            return levers()
+    levers()
+
+# creating a function to determine the next rooms after row1_option1, right door
+
+def row2_option2():
+
+    # dialouge text
+
+    print("\nYou find yourself in a bedroom with a corridor connected to it on the left and a locked door straight ahead")
+    time.sleep(1.5)
+    print(f"A note near the locked door reads \"Insert the 4 gold coins here.\" You have {gold_coin_counter} coin(s)")
+    time.sleep(1)
+    if gold_coin_counter == 4:
+        print(f"\nYou have all the necessary coins to open the door!")
+    time.sleep(1.5)
+      
+    # creating a function to determine if the user has enough gold coins to escape or to choose the next rooms
+
+    def room_chooser1():
+
+        row2_input2 = input("\nChoose a corridor/door to go through: on the [left] or [ahead]: ")
+        if row2_input2 == 'left':
+            row3_option3_and_option4()
+        elif row2_input2 == 'ahead':
+            if gold_coin_counter == 4:
+                print("Congratulations, you have escaped the castle :D")
+                exit()
+            else:
+                time.sleep(1.5)
+                print(f"You have {gold_coin_counter} coin(s). Come back here when you have all 4")
+                return room_chooser1()
+        else:
+            print("Choose one of the options.")
+            return room_chooser1()
+    room_chooser1()
+
+# defining a function to determine the next rooms after row1_option2, left
+
+def row2_option3():
+
+    #dialogue
+
+    print("\nQUICK. You hear the roof crumbling and two open archways ahead.")
+    time.sleep(1.5)
+
+    # defining another function to determine what room the user will choose and if they choose none, it returns the function until the user chooses an option
+
+    def room_chooser2():
+        row2_input3 = input("Choose the door on your [left] or [right]: ")
+        if row2_input3 == 'left':
+            row3_option5()
+        elif row2_input3 == 'right':
+            row3_option6()
+        else:
+            print("Choose an option listed above")
+            return room_chooser2()
+    room_chooser2()
+
+# defining a function to determine the next rooms after row1_option2, right
+
+def row2_option4():
+
+    print("\nYou enter a bright room filled with a variety of blinding lights and a locked door ahead.")
+    time.sleep(1.5)
+
+    # defining a function for the color puzzle that will repeat the question if the user does not make a valid input and will move them to the next room if they do
+
+    def color_puzzle():
+        row2_input4 = input("\nThe puzzle on the wall reads \"What colour does blue and yellow make?\": ")
+        if row2_input4 == 'green':
+            time.sleep(1.5)
+            print("\nThe door opens, and reveals once again, 2 corridors going both [left] and [right]")
+            time.sleep(1.5)
+
+        # defining a function to send the user to the next section of rooms and will ask the question again if they put an invalid input.
+
+            def room_chooser4():
+                room_choose1 = input("Choose one of the options: ")
+                if room_choose1 == 'left':
+                    row3_option7()
+                elif room_choose1 == 'right':
+                    row3_option8()
+                else:
+                    return room_chooser4()
+            room_chooser4()
+        else:
+            print("Try again.")
+            time.sleep(1.5)
+            return color_puzzle()
+    color_puzzle()
+
+# defining a function for the rooms after row2_option1, left
+
+def row3_option1():
+    print("\nYou walk into a room that is completely white with a shrine with a gold object on it")
+    time.sleep(1.5)
+    print("Upon closer examination, it is a gold coin. Congratulations.")
+    global gold_coin_counter
+    gold_coin_counter += 1
+    go_back_to_start()
+
+# defiing a function for the rooms after row2_option 1, right
+
+def row3_option2():
+    print("You walk into the wrong room. As soon as you walk into it you find yourself back at the start")
+    time.sleep(1.5)
+    return main_input()
+
+# creating a function to determine the next rooms after row2_option2
+
+def row3_option3_and_option4():
+
+    # dialouge text
+    print("\nYou walk through the door and the door shuts behind you.")
+    time.sleep(1.5)
+    print("You notice that the corridor diverges into 2 directions")
+    time.sleep(1.5)
+
+    # ask the user for what room they want to go into
+
+    row2_input3 = input("\nDo you want to go [left] or [right]: ")
+
+    # left room containing the fake coin
+
+    if row2_input3 == 'left':
+        print("\nYou enter a room with a large number of gold coins that cover the floor.")
+        time.sleep(2.5)
+        print("On a small table lies a coin on the table that glows brighter than the others")
+        time.sleep(2.5)
+        print("As you pick up the coin to admire it, you notice writing on the back that says \"haha this coin aint real\".") 
+        time.sleep(2.5)
+        print("Suddenly all the lighting in the room diminishes and you realize it was a trap. You get sent back to the start")
+        time.sleep(1.5)
+        return main_input()
+    
+    # right room containing the real coin
+
+    elif row2_input3 == 'right':
+        print("\nYou enter an extremely dark room that has a single beam of light shining on a coin.")
+        time.sleep(1.5)
+        print("You pick it up and put it into your pocket. Congratulations")
+        global gold_coin_counter 
+        gold_coin_counter += 1
+        time.sleep(1.5)
+        go_back_to_start()
+
+# a function that sends the user back to the start if they choose row2_option3, left
+
+def row3_option5():
+    print("\nAs soon as you enter this room, you notice the temperature suddenly becomes unbearably hot.")
+    time.sleep(1.5)
+    print("You pass out and find yourself back at the start again")
+    time.sleep(1.5)
+    return main_input()
+
+# a function that sends the user into a library with another 2 choices if they choose row2_option3, right
+
+def row3_option6():
+    print("\nYou enter a large library with 2 books laid out.")
+    time.sleep(1.5)
+
+    # defining a function to determine what book the user will choose.
+    # If they choose none of the options it will ask for their input again until they input a valid input.
+
+    def red_or_blue():
+        choose_book = input("One of them is [blue] and the other is [red]. Choose one of them: ")
+        if choose_book == 'blue':
+            print("You read a spell in the book and realize you cast a spell on yourself")
+            time.sleep(1.5)
+            print("You died. You are back at the start now")
+            return main_input()
+        elif choose_book =='red':
+            print("You flip through the book and find a coin. Congratulations.")
+            global gold_coin_counter
+            gold_coin_counter += 1
+            go_back_to_start()
+        else:
+            print("Choose one of the options.")
+            time.sleep(1.5)
+            return red_or_blue()
+    red_or_blue()
+
+# this function brings the user into a cellar and allows them to choose between 2 options if they choose row3_option7
+
+def row3_option7():
+    print("\nYou open the door and find yourself in a cellar. You are curious what is in the room.")
+    time.sleep(1.5)
+
+    # this function allows the user to choose between going forward or staying (they dont get an option either way). 
+    # the point of this function is to ensure that the code still works if the user inputs something other than the options.
+
+    def choose_forward():
+        user_go_forward = input("Would you like to go [forward] or [stay]")
+        if user_go_forward == 'forward':
+            print("The door shuts on you and you are left there to starve.")
+            time.sleep(1.5)
+            print("You die. You find yourself back at the start once again")
+            time.sleep(1.5)
+            return main_input()
+        elif user_go_forward == 'stay':
+            print("The door shuts on you and you are left there to starve.")
+            time.sleep(1.5)
+            print("You die. You find yourself back at the start once again")
+            time.sleep(1.5)
+            return main_input()
+        else:
+            return choose_forward
+    choose_forward()
+
+# this function gives the user another gold coin and sends them back to the start if they choose row3_option8
+
+def row3_option8():
+    print("\nYou find another gold coin just lying around in this room. Congratulations.")
+    global gold_coin_counter
+    gold_coin_counter += 1
+    time.sleep(1)
+    go_back_to_start()
+
+# a function that sends the user back to the start after gaining a coin
+
+def go_back_to_start(): 
+    time.sleep(1)
+    # text tells the user how many coins has left 
+    if gold_coin_counter < 4:
+        go_back = input(f"\nWould you like to go back to the beginning to find the other {4 - gold_coin_counter} coin(s) [yes]/[no]: ")
+        if go_back == 'yes':
+            print("You grow increasingly tired and find yourself back at the start")  
+            time.sleep(1.5)
+            return main_input()
+        elif go_back =='no':
+            print("haha too bad")
+            time.sleep(1.5)
+            return main_input()
+        else:
+            print("Choose one of the options listed")
+            return go_back_to_start()
+    elif gold_coin_counter == 4:
+            print("You have found all 4 coins. You grow increasingly tired and find yourself back at the start. Maybe its time to find the exit.")  
+            time.sleep(1.5)
+            return main_input()
+
+main_input()
