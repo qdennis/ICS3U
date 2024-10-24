@@ -1,0 +1,249 @@
+# Date: October 23, 2024
+# Author: Dennis 
+# Description: A 2 player Nim game
+
+import time
+import random
+
+# introduction menu
+
+def introduction():
+    print("Welcome to 2 player Nim.")
+    time.sleep(1)
+    tutorial()
+
+# stores the usernames of the players
+
+def usernames():
+    global username1, username2
+    username1 = str(input("\nPlayer 1, please enter your name: "))
+    print(f"Hello, {username1}")
+    time.sleep(1)
+    username2 = str(input("\nPlayer 2, please enter your name: "))
+    print(f"Hello, {username2}")
+    toothpicks_per_pile()
+
+# function for a tutorial for if the user is unsure of how to play
+
+def tutorial():
+    tutorial_input = input("\nWould you like a tutorial (1 minute) for the game? (yes/no): ")
+
+    if tutorial_input == 'yes':     # walkthrough of how to play the game
+        print("\n1. You start by placing toothpicks in 3-5 piles and each pile will have a random number of toothpicks.")
+        time.sleep(4)
+        print("\n2. Afterwards, the first player picks a number of toothpicks from only \033[1mONE\033[0m pile. It may be any amount in the pile")
+        time.sleep(4)
+        print("\n3. The player will do the same. However, you are \033[1mNOT\033[0m allowed to pick up sticks from multiple piles.")
+        time.sleep(4)
+        print("\n4. The player to pick up the last toothpick is the loser. Here is an example:")
+        time.sleep(4)
+        print("\nThese are the starting stacks:") # example to help visual learners understand
+        print("\nPile 1: [********] (8)\nPile 2: [****] (4)\nPile 3:[******] (5)")
+        time.sleep(7)
+        print("\nIf player 1 takes away 8 tooth picks from pile 1 for their first turn the resulting pile is:")
+        time.sleep(2)
+        print("\nPile 1: [] (0)\nPile 2: [****] (4)\nPile 3:[******] (5)")
+        time.sleep(7)
+        print("\nIf player 2 takes away 5 tooth picks from pile 3 for their first turn the resulting pile is:")
+        time.sleep(2)
+        print("\nPile 1: [] (0)\nPile 2: [****] (4)\nPile 3: [] (0)")
+        time.sleep(7)
+        print("\nNow if player 1 takes away 3 of the remaining 4 tooth picks, player 2 has to take the last tooth pick and loses.")
+        time.sleep(2)
+        print("\nPile 1: [] (0)\nPile 2: [*] (1)\nPile 3: [] (0)")
+        time.sleep(7)
+        print("\nIf you are still unsure, select (yes) for the tutorial again.")
+        time.sleep(3)
+        return tutorial() # returns user to start to ask if they need a tutorial again or not
+    elif tutorial_input == 'no':
+      return usernames() # sends user to the next section of the game
+    else: # ensures that the code doe not break if the user does not input the desired inputs
+        print("Please input either a [yes] or [no].")
+        return tutorial()
+
+def toothpicks_per_pile():  # asks the user how many toothpicks they want in each pile
+    global pile1, pile2, pile3
+    pile1 = int(input("\nHow many toothpicks would you like in pile 1? (1-10): "))
+    pile2 = int(input("How many toothpicks would you like in pile 2? (1-10): "))
+    pile3 = int(input("How many toothpicks would you like in pile 3? (1-10): "))
+    pile_visual()
+    user1_game()
+
+# A visual for the user to see how many tooth picks are in the pile
+
+def pile_visual():
+
+    print("\nSticks in piles: ")
+    global toothpicks_count
+    print("\nPile 1: [", + pile1 * "🪄  ", f"] ({pile1})")
+    print("Pile 2: [", + pile2 * "🪄  ", f"] ({pile2})")
+    print("Pile 3: [", + pile3 * "🪄  ", f"] ({pile3})")
+    toothpicks_count = pile1 + pile2 + pile3
+
+# code for the actual game
+
+def user1_game():
+    time.sleep(1)
+    global user1_pile_chooser, user1_toothpick_taker, pile1, pile2, pile3 # allows for the transfer of variables outside of the function
+    user1_pile_chooser = int(input(f"\n{username1}, choose a pile (1-3): ")) # asks the user to choose a pile
+    if user1_pile_chooser == 1: # if user enters "1" they are sent down this path
+        if pile1 > 0: # ensures that the user cant select this pile when there are no sticks in it.
+            user1_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile1}): "))
+            if user1_toothpick_taker > pile1: # returns the user if they input a number larger than the number of toothpicks in the pile
+                print("You cant take more sticks than you have in the pile.")
+                time.sleep(1)
+                return user1_game()
+            elif user1_toothpick_taker <= 0: # returns the user if they input a number less than 0
+                print("You cant take no sticks away.")
+                time.sleep(1)
+                return user1_game()
+            elif user1_toothpick_taker == toothpicks_count: # if the user picks up the last stick they lose
+                print(f"\n{username1} sucks. Tell them to give up lmao.")
+                replay()
+            else: # subtracts the toothpicks taken from the pile
+                pile1 -= user1_toothpick_taker
+                pile_visual()
+                user2_game()
+        else: 
+            print("This pile has no toothpicks. Try another pile.")
+            return user1_game()
+
+    elif user1_pile_chooser == 2:
+        if pile2 > 0:
+            user1_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile2}): "))
+            if user1_toothpick_taker > pile2: # returns the user if they input a number larger than the number of toothpicks in the pile
+                print("You cant take more sticks than you have in the pile.")
+                time.sleep(1)
+                return user1_game()
+            elif user1_toothpick_taker <= 0:
+                print("You cant take no sticks away.")
+                time.sleep(1)
+                return user1_game()
+            elif user1_toothpick_taker == toothpicks_count:
+                print(f"\n{username1} sucks. Tell them to give up lmao.")
+                replay()
+            else:
+                pile2 -= user1_toothpick_taker
+                pile_visual()
+                user2_game()
+        else:
+            print("This pile has no toothpicks. Try another pile.")
+            return user1_game()
+
+    elif user1_pile_chooser == 3:
+        if pile3 > 0:
+            user1_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile3}): "))
+            if user1_toothpick_taker > pile3: # returns the user if they input a number larger than the number of toothpicks in the pile
+                print("You cant take more sticks than you have in the pile.")
+                time.sleep(1)
+                return user1_game()
+            elif user1_toothpick_taker <= 0:
+                print("You cant take no sticks away.")
+                time.sleep(1)
+                return user1_game()
+            elif user1_toothpick_taker == toothpicks_count:
+                print(f"\n{username1} sucks. Tell them to give up lmao.")
+                replay()
+            else:
+                pile3 -= user1_toothpick_taker
+                pile_visual()
+                user2_game()
+        else:
+            print("This pile has no toothpicks. Try another pile.")
+            return user1_game()
+    else:
+        print("\nPlease input a valid input.")
+        return user1_game()
+
+def user2_game():
+    global user2_pile_chooser, user2_toothpick_taker, pile1, pile2, pile3
+    time.sleep(1)
+    user2_pile_chooser = int(input(f"\n{username2}, choose a pile (1-3): "))
+    if user2_pile_chooser == 1:
+        if pile1 > 0:
+            user2_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile2}): "))
+            if user2_toothpick_taker > pile1: # returns the user if they input a number larger than the number of toothpicks in the pile
+                print("You cant take more sticks than you have in the pile.")
+                time.sleep(1)
+                return user2_game()
+            elif user2_toothpick_taker <= 0:
+                print("You cant take no sticks away.")
+                time.sleep(1)
+                return user2_game()
+            elif user2_toothpick_taker == toothpicks_count:
+                print(f"\n{username2} sucks. Tell them to give up lmao.")
+                replay()
+            else:
+                pile1 -= user2_toothpick_taker
+                pile_visual()
+                user1_game()
+        else:
+            print("This pile has no toothpicks. Try another pile.")
+            return user2_game()
+
+    elif user2_pile_chooser == 2:
+        if pile2 > 0:
+            user2_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile2}): "))
+            if user2_toothpick_taker > pile2: # returns the user if they input a number larger than the number of toothpicks in the pile
+                print("You cant take more sticks than you have in the pile.")
+                time.sleep(1)
+                return user2_game()
+            elif user2_toothpick_taker <= 0:
+                print("You cant take no sticks away.")
+                time.sleep(1)
+                return user2_game()
+            elif user2_toothpick_taker == toothpicks_count:
+                print(f"\n{username2} sucks. Tell them to give up lmao.")
+                replay()
+            else:
+                pile2 -= user2_toothpick_taker
+                pile_visual()
+                user1_game()
+        else:
+            print("This pile has no toothpicks. Try another pile.")
+            return user2_game()
+
+    elif user2_pile_chooser == 3:
+        if pile3 > 0:
+            user2_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile2}): "))
+            if user2_toothpick_taker > pile3: # returns the user if they input a number larger than the number of toothpicks in the pile
+                print("You cant take more sticks than you have in the pile.")
+                time.sleep(1)
+                return user2_game()
+            elif user2_toothpick_taker <= 0:
+                print("You cant take no sticks away.")
+                time.sleep(1)
+                return user2_game()
+            elif user2_toothpick_taker == toothpicks_count:
+                print(f"\n{username2} sucks. Tell them to give up lmao.")
+                replay()
+            else:
+                pile3 -= user2_toothpick_taker
+                pile_visual()
+                user1_game()
+        else:
+            print("This pile has no toothpicks. Try another pile.")
+            return user2_game()
+    else:
+        print("\nPlease input a valid input.")
+        return user2_game()
+        
+# function for the user to play again
+
+def replay():
+        play_again = input("\nWould you like to play again?: ")
+        if play_again == 'yes':
+            return introduction()
+        elif play_again == 'no':
+            def beg():
+                begging = input("are you sure :( ?: ")
+                if begging != 'no':
+                    return beg()
+                else:
+                    return introduction()
+            beg()
+        else:
+            print(f'"{play_again}". I dont know what this means but i think it means you want to play again.')
+            return introduction()
+    
+introduction()
