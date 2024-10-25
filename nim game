@@ -10,8 +10,16 @@ import random
 def introduction():
     print("Welcome to 2 player Nim.")
     time.sleep(1)
-    tutorial()
-
+    def nim_mod():
+        global modified_NIM
+        modified_NIM = input("Would you like to play the original nim game or a modified version? (original/modified): ")
+        if modified_NIM == 'original':
+            tutorial()
+        elif modified_NIM == 'modified':
+            tutorial()
+        else:
+            return nim_mod()
+    nim_mod()
 # stores the usernames of the players
 
 def usernames():
@@ -26,7 +34,7 @@ def usernames():
 # function for a tutorial for if the user is unsure of how to play
 
 def tutorial():
-    tutorial_input = input("\nWould you like a tutorial (1 minute) for the game? (yes/no): ")
+    tutorial_input = input("\nWould you like a tutorial (1 minute) for the game (both modified and normal)? (yes/no): ")
 
     if tutorial_input == 'yes':     # walkthrough of how to play the game
         print("\n1. You start by placing toothpicks in 3-5 piles and each pile will have a random number of toothpicks.")
@@ -52,6 +60,10 @@ def tutorial():
         time.sleep(2)
         print("\nPile 1: [] (0)\nPile 2: [*] (1)\nPile 3: [] (0)")
         time.sleep(7)
+        print("\n\033[1mIf you are playing modified nim\033[0m, it is very similar to the normal game.")
+        time.sleep(4)
+        print("The difference is that you are allowed to roll a dice. If you roll a 6, you get to go again. You are only allowed to do this twice.")
+        time.sleep(5)
         print("\nIf you are still unsure, select (yes) for the tutorial again.")
         time.sleep(3)
         return tutorial() # returns user to start to ask if they need a tutorial again or not
@@ -60,6 +72,7 @@ def tutorial():
     else: # ensures that the code doe not break if the user does not input the desired inputs
         print("Please input either a [yes] or [no].")
         return tutorial()
+    
 
 def toothpicks_per_pile():  # asks the user how many toothpicks they want in each pile
     global pile1, pile2, pile3
@@ -80,11 +93,17 @@ def pile_visual():
     print("Pile 3: [", + pile3 * "🪄  ", f"] ({pile3})")
     toothpicks_count = pile1 + pile2 + pile3
 
+# dice counter for modified nim
+
+user1_dice_rolls = 2 # number of times user can roll the dice
+user2_dice_rolls = 2
+
+
 # code for the actual game
 
 def user1_game():
     time.sleep(1)
-    global user1_pile_chooser, user1_toothpick_taker, pile1, pile2, pile3 # allows for the transfer of variables outside of the function
+    global user1_pile_chooser, user1_toothpick_taker, pile1, pile2, pile3, dice_input, user1_dice_rolls # allows for the transfer of variables outside of the function
     user1_pile_chooser = int(input(f"\n{username1}, choose a pile (1-3): ")) # asks the user to choose a pile
     if user1_pile_chooser == 1: # if user enters "1" they are sent down this path
         if pile1 > 0: # ensures that the user cant select this pile when there are no sticks in it.
@@ -103,6 +122,32 @@ def user1_game():
             else: # subtracts the toothpicks taken from the pile
                 pile1 -= user1_toothpick_taker
                 pile_visual()
+                if modified_NIM == "modified":   # if the user has this gamemode selected, it will redirect them here to roll a dice
+                    if user1_dice_rolls >0 :
+                        time.sleep(1)
+                        dice_input = input(f"\nWould you like to roll your dice? You have {user1_dice_rolls} rolls left. (yes/no): ")
+                        if dice_input == 'yes':
+                            user1_dice_rolls -= 1
+                            print("Your number is...")
+                            time.sleep(1)
+                            number = random.randint(1,6)    # dice roll
+                            print(number)
+                            if number == 6: # if user rolls a 6
+                                print("a 6! youre so lucky. take another turn.")
+                                return user1_game()
+                            else:   # if user has bad luck
+                                print("your luck is just terrible.")
+                                return user2_game()
+                        elif dice_input == 'no':
+                            return user2_game()
+                        else:
+                            print("i dont know what this means but im going to assume you dont want to roll the dice.")
+                            time.sleep(1)
+                            return user2_game()
+                    else:
+                        print(f"{username1}, you have no more dice rolls.") # if the user has used all their dice rolls
+                        time.sleep(1)
+                        return user2_game()
                 user2_game()
         else: 
             print("This pile has no toothpicks. Try another pile.")
@@ -125,6 +170,32 @@ def user1_game():
             else:
                 pile2 -= user1_toothpick_taker
                 pile_visual()
+                if modified_NIM == "modified":   # if the user has this gamemode selected, it will redirect them here to roll a dice
+                    if user1_dice_rolls >0 :
+                        time.sleep(1)
+                        dice_input = input(f"\nWould you like to roll your dice? You have {user1_dice_rolls} rolls left. (yes/no): ")
+                        if dice_input == 'yes':
+                            user1_dice_rolls -= 1
+                            print("Your number is...")
+                            time.sleep(1)
+                            number = random.randint(1,6)    # dice roll
+                            print(number)
+                            if number == 6: # if user rolls a 6
+                                print("a 6! youre so lucky. take another turn.")
+                                return user1_game()
+                            else:   # if user has bad luck
+                                print("your luck is just terrible.")
+                                return user2_game()
+                        elif dice_input == 'no':
+                            return user2_game()
+                        else:
+                            print("i dont know what this means but im going to assume you dont want to roll the dice.")
+                            time.sleep(1)
+                            return user2_game()
+                    else:
+                        print(f"{username1}, you have no more dice rolls.") # if the user has used all their dice rolls
+                        time.sleep(1)
+                        return user2_game()
                 user2_game()
         else:
             print("This pile has no toothpicks. Try another pile.")
@@ -147,6 +218,32 @@ def user1_game():
             else:
                 pile3 -= user1_toothpick_taker
                 pile_visual()
+                if modified_NIM == "modified":   # if the user has this gamemode selected, it will redirect them here to roll a dice
+                    if user1_dice_rolls >0 :
+                        time.sleep(1)
+                        dice_input = input(f"\nWould you like to roll your dice? You have {user1_dice_rolls} rolls left. (yes/no): ")
+                        if dice_input == 'yes':
+                            user1_dice_rolls -= 1
+                            print("Your number is...")
+                            time.sleep(1)
+                            number = random.randint(1,6)    # dice roll
+                            print(number)
+                            if number == 6: # if user rolls a 6
+                                print("a 6! youre so lucky. take another turn.")
+                                return user1_game()
+                            else:   # if user has bad luck
+                                print("your luck is just terrible.")
+                                return user2_game()
+                        elif dice_input == 'no':
+                            return user2_game()
+                        else:
+                            print("i dont know what this means but im going to assume you dont want to roll the dice.")
+                            time.sleep(1)
+                            return user2_game()
+                    else:
+                        print(f"{username1}, you have no more dice rolls.") # if the user has used all their dice rolls
+                        time.sleep(1)
+                        return user2_game()
                 user2_game()
         else:
             print("This pile has no toothpicks. Try another pile.")
@@ -156,12 +253,12 @@ def user1_game():
         return user1_game()
 
 def user2_game():
-    global user2_pile_chooser, user2_toothpick_taker, pile1, pile2, pile3
+    global user2_pile_chooser, user2_toothpick_taker, pile1, pile2, pile3, dice_input, user2_dice_rolls
     time.sleep(1)
     user2_pile_chooser = int(input(f"\n{username2}, choose a pile (1-3): "))
     if user2_pile_chooser == 1:
         if pile1 > 0:
-            user2_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile2}): "))
+            user2_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile1}): "))
             if user2_toothpick_taker > pile1: # returns the user if they input a number larger than the number of toothpicks in the pile
                 print("You cant take more sticks than you have in the pile.")
                 time.sleep(1)
@@ -176,6 +273,32 @@ def user2_game():
             else:
                 pile1 -= user2_toothpick_taker
                 pile_visual()
+                if modified_NIM == "modified":   # if the user has this gamemode selected, it will redirect them here to roll a dice
+                    if user2_dice_rolls >0 :
+                        time.sleep(1)
+                        dice_input = input(f"\nWould you like to roll your dice? You have {user2_dice_rolls} rolls left. (yes/no): ")
+                        if dice_input == 'yes':
+                            user2_dice_rolls -= 1
+                            print("Your number is...")
+                            time.sleep(1)
+                            number = random.randint(1,6)    # dice roll
+                            print(number)
+                            if number == 6: # if user rolls a 6
+                                print("a 6! youre so lucky. take another turn.")
+                                return user2_game()
+                            else:   # if user has bad luck
+                                print("your luck is just terrible.")
+                                return user1_game()
+                        elif dice_input == 'no':
+                            return user1_game()
+                        else:
+                            print("i dont know what this means but im going to assume you dont want to roll the dice.")
+                            time.sleep(1)
+                            return user1_game()
+                    else:
+                        print(f"{username2}, you have no more dice rolls.") # if the user has used all their dice rolls
+                        time.sleep(1)
+                        return user1_game()
                 user1_game()
         else:
             print("This pile has no toothpicks. Try another pile.")
@@ -198,6 +321,32 @@ def user2_game():
             else:
                 pile2 -= user2_toothpick_taker
                 pile_visual()
+                if modified_NIM == "modified":   # if the user has this gamemode selected, it will redirect them here to roll a dice
+                    if user2_dice_rolls >0 :
+                        time.sleep(1)
+                        dice_input = input(f"\nWould you like to roll your dice? You have {user2_dice_rolls} rolls left. (yes/no): ")
+                        if dice_input == 'yes':
+                            user2_dice_rolls -= 1
+                            print("Your number is...")
+                            time.sleep(1)
+                            number = random.randint(1,6)    # dice roll
+                            print(number)
+                            if number == 6: # if user rolls a 6
+                                print("a 6! youre so lucky. take another turn.")
+                                return user2_game()
+                            else:   # if user has bad luck
+                                print("your luck is just terrible.")
+                                return user1_game()
+                        elif dice_input == 'no':
+                            return user1_game()
+                        else:
+                            print("i dont know what this means but im going to assume you dont want to roll the dice.")
+                            time.sleep(1)
+                            return user1_game()
+                    else:
+                        print(f"{username2}, you have no more dice rolls.") # if the user has used all their dice rolls
+                        time.sleep(1)
+                        return user1_game()
                 user1_game()
         else:
             print("This pile has no toothpicks. Try another pile.")
@@ -205,7 +354,7 @@ def user2_game():
 
     elif user2_pile_chooser == 3:
         if pile3 > 0:
-            user2_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile2}): "))
+            user2_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile3}): "))
             if user2_toothpick_taker > pile3: # returns the user if they input a number larger than the number of toothpicks in the pile
                 print("You cant take more sticks than you have in the pile.")
                 time.sleep(1)
@@ -220,6 +369,32 @@ def user2_game():
             else:
                 pile3 -= user2_toothpick_taker
                 pile_visual()
+                if modified_NIM == "modified":   # if the user has this gamemode selected, it will redirect them here to roll a dice
+                    if user2_dice_rolls >0 :
+                        time.sleep(1)
+                        dice_input = input(f"\nWould you like to roll your dice? You have {user2_dice_rolls} rolls left. (yes/no): ")
+                        if dice_input == 'yes':
+                            user2_dice_rolls -= 1
+                            print("Your number is...")
+                            time.sleep(1)
+                            number = random.randint(1,6)    # dice roll
+                            print(number)
+                            if number == 6: # if user rolls a 6
+                                print("a 6! youre so lucky. take another turn.")
+                                return user2_game()
+                            else:   # if user has bad luck
+                                print("your luck is just terrible.")
+                                return user1_game()
+                        elif dice_input == 'no':
+                            return user1_game()
+                        else:
+                            print("i dont know what this means but im going to assume you dont want to roll the dice.")
+                            time.sleep(1)
+                            return user1_game()
+                    else:
+                        print(f"{username2}, you have no more dice rolls.") # if the user has used all their dice rolls
+                        time.sleep(1)
+                        return user1_game()
                 user1_game()
         else:
             print("This pile has no toothpicks. Try another pile.")
@@ -231,19 +406,22 @@ def user2_game():
 # function for the user to play again
 
 def replay():
-        play_again = input("\nWould you like to play again?: ")
-        if play_again == 'yes':
-            return introduction()
-        elif play_again == 'no':
-            def beg():
-                begging = input("are you sure :( ?: ")
-                if begging != 'no':
-                    return beg()
-                else:
-                    return introduction()
-            beg()
-        else:
-            print(f'"{play_again}". I dont know what this means but i think it means you want to play again.')
-            return introduction()
+    global user1_dice_rolls, user2_dice_rolls
+    play_again = input("\nWould you like to play again?: ")
+    user1_dice_rolls = 2 # reset the values because they were subtracted throughout the game
+    user2_dice_rolls = 2
+    if play_again == 'yes':
+        return introduction()
+    elif play_again == 'no':
+        def beg(): # a function to force the user to play again
+            begging = input("are you sure :( ?: ")
+            if begging != 'no':
+                return beg()
+            else:
+                return introduction()
+        beg()
+    else:
+        print(f'"{play_again}". I dont know what this means but i think it means you want to play again.')
+        return introduction()
     
 introduction()
