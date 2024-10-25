@@ -138,7 +138,7 @@ user1_dice_rolls = 2 # number of times user can roll the dice
 user2_dice_rolls = 2
 
 
-# code for the actual game
+# code for the actual game (lines 143- 443)
 
 def user1_game():
     time.sleep(1)
@@ -175,7 +175,7 @@ def user1_game():
                                 print("a 6! youre so lucky. take another turn.")
                                 return user1_game()
                             else:   # if user has bad luck
-                                print("your luck is just terrible.")
+                                print("your luck sucks.")
                                 return user2_game()
                         elif dice_input == 'no':
                             return user2_game()
@@ -192,7 +192,7 @@ def user1_game():
             print("This pile has no toothpicks. Try another pile.")
             return user1_game()
 
-    elif user1_pile_chooser == 2:
+    elif user1_pile_chooser == 2: # similar functionality to choosing pile 1
         if pile2 > 0:
             user1_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile2}): "))
             if user1_toothpick_taker > pile2: # returns the user if they input a number larger than the number of toothpicks in the pile
@@ -223,7 +223,7 @@ def user1_game():
                                 print("a 6! youre so lucky. take another turn.")
                                 return user1_game()
                             else:   # if user has bad luck
-                                print("your luck is just terrible.")
+                                print("your luck sucks.")
                                 return user2_game()
                         elif dice_input == 'no':
                             return user2_game()
@@ -240,7 +240,7 @@ def user1_game():
             print("This pile has no toothpicks. Try another pile.")
             return user1_game()
 
-    elif user1_pile_chooser == 3:
+    elif user1_pile_chooser == 3:   # similar functionality to choosing pile 1
         if pile3 > 0:
             user1_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile3}): "))
             if user1_toothpick_taker > pile3: # returns the user if they input a number larger than the number of toothpicks in the pile
@@ -271,7 +271,7 @@ def user1_game():
                                 print("a 6! youre so lucky. take another turn.")
                                 return user1_game()
                             else:   # if user has bad luck
-                                print("your luck is just terrible.")
+                                print("your luck sucks.")
                                 return user2_game()
                         elif dice_input == 'no':
                             return user2_game()
@@ -291,13 +291,13 @@ def user1_game():
         print("\nPlease input a valid input.")
         return user1_game()
 
-def user2_game():
-    global user2_pile_chooser, user2_toothpick_taker, pile1, pile2, pile3, dice_input, user2_dice_rolls
+def user2_game():   # identical to user1_game() but it is for user2
+    global user2_pile_chooser, user2_toothpick_taker, pile1, pile2, pile3, dice_input, user2_dice_rolls # allows for variables to be brought out of functions
     time.sleep(1)
-    user2_pile_chooser = int(input(f"\n{username2}, choose a pile (1-3): "))
-    if user2_pile_chooser == 1:
+    user2_pile_chooser = int(input(f"\n{username2}, choose a pile (1-3): "))    # asks user to choose a pile
+    if user2_pile_chooser == 1: #user chooses pile1
         if pile1 > 0:
-            user2_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile1}): "))
+            user2_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile1}): ")) #asks user to choose how many sticks to takeaway
             if user2_toothpick_taker > pile1: # returns the user if they input a number larger than the number of toothpicks in the pile
                 print("You cant take more sticks than you have in the pile.")
                 time.sleep(1)
@@ -306,10 +306,10 @@ def user2_game():
                 print("You cant take no sticks away.")
                 time.sleep(1)
                 return user2_game()
-            elif user2_toothpick_taker == toothpicks_count:
+            elif user2_toothpick_taker == toothpicks_count: # if the user takes away the last stick, they lose
                 print(f"\n{username2} sucks. Tell them to give up lmao.")
                 replay()
-            else:
+            else:   # if the user choses a valid value, it will take away the number of toothpicks they inputted
                 pile1 -= user2_toothpick_taker
                 pile_visual()
                 if modified_NIM == "modified":   # if the user has this gamemode selected, it will redirect them here to roll a dice
@@ -326,9 +326,9 @@ def user2_game():
                                 print("a 6! youre so lucky. take another turn.")
                                 return user2_game()
                             else:   # if user has bad luck
-                                print("your luck is just terrible.")
+                                print("your luck sucks.")
                                 return user1_game()
-                        elif dice_input == 'no':
+                        elif dice_input == 'no':    # if they dont want to roll a dice, player 2 gets the turn.
                             return user1_game()
                         else:
                             print("i dont know what this means but im going to assume you dont want to roll the dice.")
@@ -343,7 +343,7 @@ def user2_game():
             print("This pile has no toothpicks. Try another pile.")
             return user2_game()
 
-    elif user2_pile_chooser == 2:
+    elif user2_pile_chooser == 2: # similar functionality to choosing pile 1
         if pile2 > 0:
             user2_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile2}): "))
             if user2_toothpick_taker > pile2: # returns the user if they input a number larger than the number of toothpicks in the pile
@@ -374,7 +374,7 @@ def user2_game():
                                 print("a 6! youre so lucky. take another turn.")
                                 return user2_game()
                             else:   # if user has bad luck
-                                print("your luck is just terrible.")
+                                print("your luck sucks.")
                                 return user1_game()
                         elif dice_input == 'no':
                             return user1_game()
@@ -391,7 +391,7 @@ def user2_game():
             print("This pile has no toothpicks. Try another pile.")
             return user2_game()
 
-    elif user2_pile_chooser == 3:
+    elif user2_pile_chooser == 3: # similar functionality to choosing pile 1
         if pile3 > 0:
             user2_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile3}): "))
             if user2_toothpick_taker > pile3: # returns the user if they input a number larger than the number of toothpicks in the pile
@@ -422,7 +422,7 @@ def user2_game():
                                 print("a 6! youre so lucky. take another turn.")
                                 return user2_game()
                             else:   # if user has bad luck
-                                print("your luck is just terrible.")
+                                print("your luck sucks.")
                                 return user1_game()
                         elif dice_input == 'no':
                             return user1_game()
@@ -435,17 +435,17 @@ def user2_game():
                         time.sleep(1)
                         return user1_game()
                 user1_game()
-        else:
+        else:   # returns the user input if they choose the pile with 0 sticks
             print("This pile has no toothpicks. Try another pile.")
             return user2_game()
-    else:
+    else:   # asks the user to type in a valid input
         print("\nPlease input a valid input.")
         return user2_game()
         
 # function for the user to play again
 
 def replay():
-    global user1_dice_rolls, user2_dice_rolls
+    global user1_dice_rolls, user2_dice_rolls   # allows the variables to be modified outside the function
     play_again = input("\nWould you like to play again?: ")
     user1_dice_rolls = 2 # reset the dice rolls because they were subtracted throughout the game
     user2_dice_rolls = 2
@@ -455,12 +455,11 @@ def replay():
         def beg(): # a function to force the user to play again
             begging = input("are you sure :( ?: ")
             if begging != 'no':
-                return beg()
+                return beg()    # they cant escape
             else:
                 return introduction()
         beg()
     else:
-        print(f'"{play_again}". I dont know what this means but i think it means you want to play again.')
-        return introduction()
+        return replay()
     
 introduction()
