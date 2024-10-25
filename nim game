@@ -75,12 +75,51 @@ def tutorial():
     
 
 def toothpicks_per_pile():  # asks the user how many toothpicks they want in each pile
-    global pile1, pile2, pile3
-    pile1 = int(input("\nHow many toothpicks would you like in pile 1? (1-10): "))
-    pile2 = int(input("How many toothpicks would you like in pile 2? (1-10): "))
-    pile3 = int(input("How many toothpicks would you like in pile 3? (1-10): "))
-    pile_visual()
-    user1_game()
+    def pile1_restrictions():   # pile restrictions so the user chooses between the numbers
+        global pile1
+        pile1 = int(input("\nHow many toothpicks would you like in pile 1? (1-10): "))
+        if pile1 >  10:
+            print("You cant have more than 10 sticks.")
+            return pile1_restrictions()
+        elif pile1 <=0:
+            print("You cant have no sticks in this pile.")
+            return pile1_restrictions()
+        elif 0 < pile1 <= 10:
+            return pile2_restrictions()
+        else:
+            print("Please input a number.")
+            return pile1_restrictions()
+    def pile2_restrictions(): # pile restrictions so the user chooses between the numbers
+        global pile2
+        pile2 = int(input("\nHow many toothpicks would you like in pile 2? (1-10): "))
+        if pile2 >  10:
+            print("You cant have more than 10 sticks.")
+            return pile2_restrictions()
+        elif pile2 <=0:
+            print("You cant have no sticks in this pile.")
+            return pile2_restrictions()
+        elif 0 < pile2 <= 10:
+            return pile3_restrictions()
+        else:
+            print("Please input a number.")
+            return pile2_restrictions() 
+    def pile3_restrictions(): # pile restrictions so the user chooses between the given numbers
+        global pile3
+        pile3 = int(input("\nHow many toothpicks would you like in pile 1? (1-10): "))
+        if pile3 >  10:
+            print("You cant have more than 10 sticks.")
+            return pile3_restrictions()
+        elif pile3 <=0:
+            print("You cant have no sticks in this pile.")
+            return pile3_restrictions()
+        elif 0 < pile3 <= 10:
+            pile_visual()
+            user1_game()
+        else:
+            print("Please input a number.")
+            return pile3_restrictions()
+    pile1_restrictions()
+
 
 # A visual for the user to see how many tooth picks are in the pile
 
@@ -108,7 +147,7 @@ def user1_game():
     if user1_pile_chooser == 1: # if user enters "1" they are sent down this path
         if pile1 > 0: # ensures that the user cant select this pile when there are no sticks in it.
             user1_toothpick_taker = int(input(f"How many toothpicks would you like to take away from this pile? (MAX is {pile1}): "))
-            if user1_toothpick_taker > pile1: # returns the user if they input a number larger than the number of toothpicks in the pile
+            if user1_toothpick_taker > pile1: # returns the user if they input a number larger than the number of toothpicks in the pile (anti-cheat)
                 print("You cant take more sticks than you have in the pile.")
                 time.sleep(1)
                 return user1_game()
@@ -160,7 +199,7 @@ def user1_game():
                 print("You cant take more sticks than you have in the pile.")
                 time.sleep(1)
                 return user1_game()
-            elif user1_toothpick_taker <= 0:
+            elif user1_toothpick_taker <= 0: #anti-cheat
                 print("You cant take no sticks away.")
                 time.sleep(1)
                 return user1_game()
@@ -171,7 +210,7 @@ def user1_game():
                 pile2 -= user1_toothpick_taker
                 pile_visual()
                 if modified_NIM == "modified":   # if the user has this gamemode selected, it will redirect them here to roll a dice
-                    if user1_dice_rolls >0 :
+                    if user1_dice_rolls >0 : #anti-cheat
                         time.sleep(1)
                         dice_input = input(f"\nWould you like to roll your dice? You have {user1_dice_rolls} rolls left. (yes/no): ")
                         if dice_input == 'yes':
@@ -219,7 +258,7 @@ def user1_game():
                 pile3 -= user1_toothpick_taker
                 pile_visual()
                 if modified_NIM == "modified":   # if the user has this gamemode selected, it will redirect them here to roll a dice
-                    if user1_dice_rolls >0 :
+                    if user1_dice_rolls >0 : #anti-cheat
                         time.sleep(1)
                         dice_input = input(f"\nWould you like to roll your dice? You have {user1_dice_rolls} rolls left. (yes/no): ")
                         if dice_input == 'yes':
@@ -263,7 +302,7 @@ def user2_game():
                 print("You cant take more sticks than you have in the pile.")
                 time.sleep(1)
                 return user2_game()
-            elif user2_toothpick_taker <= 0:
+            elif user2_toothpick_taker <= 0: #anti-cheat
                 print("You cant take no sticks away.")
                 time.sleep(1)
                 return user2_game()
@@ -311,7 +350,7 @@ def user2_game():
                 print("You cant take more sticks than you have in the pile.")
                 time.sleep(1)
                 return user2_game()
-            elif user2_toothpick_taker <= 0:
+            elif user2_toothpick_taker <= 0: #anti-cheat
                 print("You cant take no sticks away.")
                 time.sleep(1)
                 return user2_game()
@@ -359,7 +398,7 @@ def user2_game():
                 print("You cant take more sticks than you have in the pile.")
                 time.sleep(1)
                 return user2_game()
-            elif user2_toothpick_taker <= 0:
+            elif user2_toothpick_taker <= 0: #anti-cheat
                 print("You cant take no sticks away.")
                 time.sleep(1)
                 return user2_game()
@@ -408,7 +447,7 @@ def user2_game():
 def replay():
     global user1_dice_rolls, user2_dice_rolls
     play_again = input("\nWould you like to play again?: ")
-    user1_dice_rolls = 2 # reset the values because they were subtracted throughout the game
+    user1_dice_rolls = 2 # reset the dice rolls because they were subtracted throughout the game
     user2_dice_rolls = 2
     if play_again == 'yes':
         return introduction()
