@@ -1,0 +1,10 @@
+scores = (88, 76, 90, 85, 93, 76, 90, 88, 92 )
+
+print(f"Highest score: {max(scores)}")
+print(f"Lowest score: {min(scores)}")
+print(f"Number of times 90 appears: {scores.count(90)}")
+print(f"Average: {sum(scores)/len(scores)}")
+
+modified_scores = tuple(set(sorted(scores)))
+modified_scores = tuple(reversed(modified_scores))
+print(modified_scores[0:3])
