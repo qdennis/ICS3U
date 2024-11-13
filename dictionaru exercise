@@ -1,0 +1,10 @@
+dictionary = {"bob": "brown", "ben": "yellow" , "quantavious ronald": "blue"}
+print(dictionary)
+
+dictionary["bricky ricky"] = "red"
+dictionary["bob"] = "green"
+del dictionary["ben"]
+if "Michelle" in dictionary:
+    print("Michelle is in the dictionary")
+else:
+    print("Michelle is not in the dictionary")
