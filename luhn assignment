@@ -1,0 +1,214 @@
+# Throughout this project, the use of data structures are not permitted 
+# Minimal built in functions are to be used and the majority of functions must be
+# created yourself
+
+# More packages may be imported in the space below if approved by your instructor
+
+import time
+import csv
+
+def printMenu():
+    print('''
+    Customer and Sales System\n
+        1. Enter Customer Information\n
+        2. Generate Customer data file\n
+        3. Report on total Sales (Not done in this part)\n
+        4. Check for fraud in sales data (Not done in this part)\n
+        9. Quit\n
+        Enter menu option (1-9)
+     ''')
+
+'''
+    This function is to be edited to achieve the task.
+    It is your decision to make this function a procedural or functional type
+    You may place as many or as few parameters as needed
+    This function may also be broken down further depending on your algorithm/approach
+'''
+def enterCustomerInfo():
+    global first_name, last_name, city, postal_code, credit
+    
+    first_name = input('''
+        1. Customer's first name: ''')
+    if first_name[0].isupper():
+        pass
+    else:
+        first_name =  f"{first_name} <- First name is not capitalized, please correct!"
+    
+    last_name = input('''
+        2. Customer's surname: ''')   
+    if last_name[0].isupper():
+        pass
+    else:
+        last_name =  f"{last_name} <- Surname is not capitalized, please correct!"
+    
+    city = input('''
+        3. City: ''')
+    if city in open('postal_codes.csv').read():
+        pass
+    else:
+        city = f"{city} <- City does not exist, please correct!"
+    
+    while True:
+        postal_code = input('''     
+        4. Postal code: ''')
+        if len(postal_code) != 7:
+            print('''           Loading...''')
+            time.sleep(1)
+            print("           Please input a postal code that is 6 characters long (eg. T0A 2C0).")
+            continue
+        else:
+            validatePostalCode()
+        print('''           Loading...''')
+        time.sleep(1)
+        if check_value == 1:
+            print('''           Postal Code is valid.''')
+            break
+        else:
+            print('''
+            Postal code is invalid. Please try again''')
+            continue
+
+    while True:
+        global original_credit_card_number
+        credit = list(input('''
+        5. Customer's credit card number (16 digits): '''))
+        original_credit_card_number = credit
+        if 9 <= len(credit) <= 16:
+            print('''           Verifying...''')
+            time.sleep(1)
+            validateCreditCard()
+            if check_value == 1:
+                print('''           Credit card is valid''')
+                time.sleep(1)
+                break
+            else:
+                print('''           Credit card is invalid. Please try again.''')
+                continue   
+        else:
+            print('''           Please input 16 digits''')
+            continue
+    
+    confirmation()
+
+'''
+    This function is to be edited to achieve the task.
+    It is your decision to make this function a procedural or functional type
+    You may place as many or as few parameters as needed
+    This function may also be broken down further depending on your algorithm/approach
+'''
+def validatePostalCode():
+    global check_value
+    list(postal_code)
+    check = postal_code[:3]
+    if check in open('postal_codes.csv').read():
+        check_value = 1
+    else:
+        check_value = 0
+
+'''
+    This function is to be edited to achieve the task.
+    It is your decision to make this function a procedural or functional type
+    You may place as many or as few parameters as needed
+    This function may also be broken down further depending on your algorithm/approach
+'''
+def validateCreditCard():
+    global credit, check_value
+    sum1 = 0
+    sum2 = 0
+    credit = list(reversed(credit))
+    for i in range(len(credit)): 
+        if i % 2 ==0:
+            sum1 = int(credit[i]) + sum1
+        elif i % 2 != 0: 
+            credit[i] = 2*int(credit[i]) 
+            if int(credit[i]) > 9:  
+               credit[i] -= 9       
+            sum2 = int(credit[i]) + sum2  
+            continue
+    total_sum = sum2 + sum1
+    if total_sum % 10 == 0:
+        check_value = 1
+    else:
+        check_value = 0
+'''
+    This function is to be edited to achieve the task.
+    It is your decision to make this function a procedural or functional type
+    You may place as many or as few parameters as needed
+    This function may also be broken down further depending on your algorithm/approach
+'''
+def generateCustomerDataFile():
+    global customer_ID
+    customer_ID += 1
+    seperator = ""
+    data = [
+        ["First name", " Surname", " City", " Postal Code", " Credit card number", " file ID"],
+        [f"{first_name}", f" {last_name}", f" {city}", f" {postal_code}", f" Credit Card ending in {seperator.join(original_credit_card_number[-4:])}", f" #{customer_ID}"]
+    ]
+
+    with open(f"file{str(customer_ID)}.csv", 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(data)
+
+
+    print("        Creating...")
+    time.sleep(2)
+    print(f'''        File {customer_ID} was created.''')
+    time.sleep(2)
+
+
+####################################################################
+#       ADDITIONAL METHODS MAY BE ADDED BELOW IF NECESSARY         #
+####################################################################
+
+def confirmation():
+    seperator = ""
+    confirm = input(f'''
+        Please confirm the data you have inputted is correct (yes/no):\n
+        First name: {first_name}
+        Surname: {last_name}
+        City: {city}
+        Potal Code: {postal_code}
+        Credit Card: {seperator.join(original_credit_card_number)}\n
+''')
+    if confirm == 'yes':
+        time.sleep(1)
+        return printMenu()
+    elif confirm == 'no':
+        time.sleep(1)
+        return enterCustomerInfo()
+    else:
+        return confirmation()
+
+####################################################################
+#                            MAIN PROGRAM                          #
+#           DO NOT EDIT ANY CODE EXCEPT WHERE INDICATED            #
+####################################################################
+
+# Do not edit any of these variables
+userInput = ""
+enterCustomerOption = "1"
+generateCustomerOption = "2"
+exitCondition = "9"
+
+# More variables for the main may be declared in the space below
+customer_ID = 0
+
+
+while userInput != exitCondition:
+    printMenu()                 # Printing out the main menu
+    userInput = input();        # User selection from the menu
+
+    if userInput == enterCustomerOption:
+        # Only the line below may be editted based on the parameter list and how you design the method return
+        # Any necessary variables may be added to this if section, but nowhere else in the code
+        enterCustomerInfo()
+
+    elif userInput == generateCustomerOption: 
+        # Only the line below may be editted based on the parameter list and how you design the method return
+        generateCustomerDataFile()
+
+    else:
+        print("Please type in a valid option (A number from 1-9)")
+
+#Exits once the user types 
+print("Program Terminated")
