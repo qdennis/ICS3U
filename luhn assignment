@@ -46,11 +46,12 @@ def enterCustomerInfo():
     if city in open('postal_codes.csv').read():
         pass
     else:
-        city = f"{city} <- City does not exist, please correct!"
+        city = f"{city} <- City does not exist in database, please correct!"
     
     while True:
         postal_code = input('''     
         4. Postal code: ''')
+        postal_code = postal_code.upper()
         if len(postal_code) != 7:
             print('''           Loading...''')
             time.sleep(1)
