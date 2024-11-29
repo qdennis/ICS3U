@@ -55,7 +55,7 @@ def enterCustomerInfo():
         if len(postal_code) != 7:
             print('''           Loading...''')
             time.sleep(1)
-            print("           Please input a postal code that is 6 characters long (eg. T0A 2C0).")
+            print("           Please input a valid postal code that is 6 characters long (eg. T0A 2C0).")
             continue
         else:
             validatePostalCode()
@@ -74,20 +74,26 @@ def enterCustomerInfo():
         credit = list(input('''
         5. Customer's credit card number (16 digits): '''))
         original_credit_card_number = credit
-        if 9 <= len(credit) <= 16:
-            print('''           Verifying...''')
-            time.sleep(1)
-            validateCreditCard()
-            if check_value == 1:
-                print('''           Credit card is valid''')
+        try:
+            if 9 <= len(credit) <= 16:
+                print('''           Verifying...''')
                 time.sleep(1)
-                break
+                validateCreditCard()
+                if check_value == 1:
+                    print('''           Credit card is valid''')
+                    time.sleep(1)
+                    break
+                else:
+                    print('''           Credit card is invalid. Please try again.''')
+                    continue   
             else:
-                print('''           Credit card is invalid. Please try again.''')
-                continue   
-        else:
-            print('''           Please input 16 digits''')
+                print('''           Please input 16 digits''')
+                continue
+        except:
+            print('''           Credit card is invalid. Please try again.''')
+            time.sleep(1)
             continue
+            
     
     confirmation()
 
