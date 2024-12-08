@@ -2,20 +2,18 @@ import random
 import time
 
 def easy_mode():
-    global guessed_letters, attempts, word, hidden_word
-    word_list = ["pentagon", "pineapple", "pencil", "potato", "plane", "four", "wrist", "phone", "table", "wrapper"]
-    guessed_letters = []
-    word = random.choice(word_list)
-    attempts = 10
+    global guessed_letters, attempts, word, hidden_word # globalizes variables in the function
+    word_list = ["pentagon", "pineapple", "pencil", "potato", "plane", "four", "wrist", "phone", "table", "wrapper"]    # word list for the code to choose from
+    guessed_letters = []    # stores guessed letters here
+    word = random.choice(word_list) # chooses a random word from the list
+    attempts = 10   # a variable that keeps track of how many times a user typed in an incorrect letter
 
-    hidden_word = list(word)
+    hidden_word = list(word)    # this part converts the word in the list into dashes (-) to hide the word
     for i in range(len(hidden_word)):
         hidden_word[i] = '-'
 
-    print(word)
-
 def hard_mode():
-    global guessed_letters, attempts, word, hidden_word
+    global guessed_letters, attempts, word, hidden_word # globalizes variables in the function
     word_list = ["choledocholithiasis", "hyperhidrosis", "pneumoultramicroscopicsilicovolcanoconiosis", "oophorohysterectomy", "borborygmi"] 
     guessed_letters = []
     word = random.choice(word_list)
@@ -25,78 +23,77 @@ def hard_mode():
     for i in range(len(hidden_word)):
         hidden_word[i] = '-'
 
-    print(list(word))
 
 def display_word():
-    global hidden_word, attempts
-    print("current guesses: " + "".join(hidden_word))
-    time.sleep(1)
-    get_guess()
-    if guess in word:
+    global hidden_word, attempts    # globalizes variables in the function
+    print("current guesses: " + "".join(hidden_word))   # shows the user the hidden word as a single string
+    time.sleep(0.5)
+    get_guess() 
+    if guess in word:   # checks if the user's guess is in the word. if not it removes an attempt
         for i in range(len(word)):
-            if word[i] == guess:
+            if word[i] == guess:    # this goes through each and every letter in the word and if any of the words match the guess, it replaces the dashed line with the letter at that point
                 hidden_word[i] = guess
     else:
         attempts -= 1  
     
 def get_guess():
-    global guess
-    while True:
+    global guess    # globalizes variable in the function
+    while True:     # while loop ensures that the code runs indefinitely until the user types in a valid input
         guess = input("guess a letter: ")
         time.sleep(0.5)
-        if len(guess) != 1:
+        if len(guess) != 1: # if the string is longer than 1, it makes the user input another value
             print("must be ONE letter\n")
-        elif guess.isupper():
+        elif guess.isupper():   # checks if the letter is uppercase and makes the user input another value if it is uppercase
             print("must be lowercase\n")
-        elif guess in guessed_letters:
+        elif guess in guessed_letters:  # checks if the user guessed a specific letter already and makes the user input another value if it finds a duplicate letter
             print("you have already guessed this letter\n")
-        elif not guess.isalpha():
+        elif not guess.isalpha():   # not guess.isalpha checks for any inputs that are other than letters and makes the user input another value if it finds that no letters are found.
             print("must be a letter in the alphabet\n")
         else:
-            guessed_letters.append(guess)
-            guessed_letters.sort()
+            guessed_letters.append(guess)   # adds the gussed letter into the list 
+            guessed_letters.sort()  # sorts the list alphabetically so that the user is able to determine which letters they have not guessed
             break
 
 def play_game():
-    global attempts
+    global attempts # globalizes variable in the function   
     while True:
-        difficulty = input("Would you like to play easy or difficult mode?: ")
-        print('')
-        time.sleep(1)
-        if difficulty.lower() == 'difficult':
+        difficulty = input("Would you like to play easy or difficult mode?: ")  # allows user to choose 2 difficulties
+        print('') # spacing
+        time.sleep(0.5)
+        if difficulty.lower() == 'difficult':   # sends the user to the hard_mode() function
             hard_mode()
             break
-        elif difficulty.lower() == 'easy':
+        elif difficulty.lower() == 'easy': # sends the user to the easy_mode() function
             easy_mode()
             break
         else:
-            print("please input easy or difficult")
+            print("please input easy or difficult") # if the user types anything other than easy or difficult
     while True:
-        if attempts != 0:
+        if attempts != 0:   # the code runs if the user has not reached the attempts threshold
             display_word()
-            if '-' not in hidden_word:
+            if '-' not in hidden_word:  # checks if the word has any dashes, if not the user wins
                 print("\nCONGRATS YOU GOT THE WORD !!!!\n")
                 break
             else:
-                time.sleep(1)
+                time.sleep(0.5) # if the word still has dashes, it repeats the while loop
                 print(f"number of bad guesses left: {attempts}")
                 print(f"used letters: {', '.join(guessed_letters)}\n")
 
-        else:
+        else:   # prints a message to tell the user they lost and tells them what it was
             print(f"you guessed wrong too many times. the word was {word}")
             break
             
-    while True:
+    while True: # a restart portion that allows the user to play again if they want
         restart = input("wanna restart? (yes/no): ")
         print('')
         if restart == 'yes':
             attempts = 10
-            time.sleep(1)
+            time.sleep(0.5)
             return play_game()
         elif restart == 'no':
             quit()
-        else:
+        else:   # if the user does not input a valid input
             print("im not too sure what you are saying. please type yes or no.")
             continue
 
-play_game()
+play_game() # calls the function that runs the game
