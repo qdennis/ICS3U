@@ -1,0 +1,51 @@
+import random
+import time
+
+word_list = ["pentagon", "pineapple", "pencil", "potato", "plane", "four", "wrist", "phone", "table", "wrapper"]
+guessed_letters = []
+word = random.choice(word_list)
+attempts = 10
+
+hidden_word = list(word)
+for i in range(len(hidden_word)):
+    hidden_word[i] = '-'
+
+print(word)
+    
+
+
+def display_word():
+    global hidden_word, attempts
+    print("\ncurrent guesses: " + "".join(hidden_word))
+    get_guess()
+    if guess in word:
+        for i in range(len(word)):
+            if word[i] == guess:
+                hidden_word[i] = guessA
+    else:
+        attempts -= 1  
+    
+def get_guess():
+    global guess
+    while True:
+        guess = input("guess a letter: ")
+        if len(guess) != 1:
+            print("must be ONE letter")
+        elif guess.isupper():
+            print("must be lowercase")
+        else:
+            guessed_letters.append(guess)
+            guessed_letters.sort()
+            break
+
+def play_game():
+    while True:
+        display_word()
+        print(f"number of attempts left: {attempts}")
+
+        # MAKE LOOP AND ADD REPLAY SYSTEM
+
+play_game()
+
+
+
