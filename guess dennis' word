@@ -1,22 +1,36 @@
 import random
 import time
 
-word_list = ["pentagon", "pineapple", "pencil", "potato", "plane", "four", "wrist", "phone", "table", "wrapper"]
-guessed_letters = []
-word = random.choice(word_list)
-attempts = 10
+def easy_mode():
+    global guessed_letters, attempts, word, hidden_word
+    word_list = ["pentagon", "pineapple", "pencil", "potato", "plane", "four", "wrist", "phone", "table", "wrapper"]
+    guessed_letters = []
+    word = random.choice(word_list)
+    attempts = 10
 
-hidden_word = list(word)
-for i in range(len(hidden_word)):
-    hidden_word[i] = '-'
+    hidden_word = list(word)
+    for i in range(len(hidden_word)):
+        hidden_word[i] = '-'
 
-print(word)
+    print(word)
+
+def hard_mode():
+    global guessed_letters, attempts, word, hidden_word
+    word_list = ["choledocholithiasis", "hyperhidrosis", "pneumoultramicroscopicsilicovolcanoconiosis", "oophorohysterectomy", "borborygmi"] 
+    guessed_letters = []
+    word = random.choice(word_list)
+    attempts = 10
     
+    hidden_word = list(word)
+    for i in range(len(hidden_word)):
+        hidden_word[i] = '-'
 
+    print(list(word))
 
 def display_word():
     global hidden_word, attempts
-    print("\ncurrent guesses: " + "".join(hidden_word))
+    print("current guesses: " + "".join(hidden_word))
+    time.sleep(1)
     get_guess()
     if guess in word:
         for i in range(len(word)):
@@ -29,23 +43,60 @@ def get_guess():
     global guess
     while True:
         guess = input("guess a letter: ")
+        time.sleep(0.5)
         if len(guess) != 1:
-            print("must be ONE letter")
+            print("must be ONE letter\n")
         elif guess.isupper():
-            print("must be lowercase")
+            print("must be lowercase\n")
+        elif guess in guessed_letters:
+            print("you have already guessed this letter\n")
+        elif not guess.isalpha():
+            print("must be a letter in the alphabet\n")
         else:
             guessed_letters.append(guess)
             guessed_letters.sort()
             break
 
 def play_game():
+    global attempts
     while True:
-        display_word()
-        print(f"number of attempts left: {attempts}")
+        difficulty = input("Would you like to play easy or difficult mode?: ")
+        print('')
+        time.sleep(1)
+        if difficulty.lower() == 'difficult':
+            hard_mode()
+            break
+        elif difficulty.lower() == 'easy':
+            easy_mode()
+            break
+        else:
+            print("please input easy or difficult")
+    while True:
+        if attempts != 0:
+            display_word()
+            if '-' not in hidden_word:
+                print("\nCONGRATS YOU GOT THE WORD !!!!\n")
+                break
+            else:
+                time.sleep(1)
+                print(f"number of bad guesses left: {attempts}")
+                print(f"used letters: {', '.join(guessed_letters)}\n")
 
-        # MAKE LOOP AND ADD REPLAY SYSTEM
+        else:
+            print(f"you guessed wrong too many times. the word was {word}")
+            break
+            
+    while True:
+        restart = input("wanna restart? (yes/no): ")
+        print('')
+        if restart == 'yes':
+            attempts = 10
+            time.sleep(1)
+            return play_game()
+        elif restart == 'no':
+            quit()
+        else:
+            print("im not too sure what you are saying. please type yes or no.")
+            continue
 
 play_game()
-
-
-
