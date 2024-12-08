@@ -14,7 +14,7 @@ def easy_mode():
 
 def hard_mode():
     global guessed_letters, attempts, word, hidden_word # globalizes variables in the function
-    word_list = ["choledocholithiasis", "hyperhidrosis", "pneumoultramicroscopicsilicovolcanoconiosis", "oophorohysterectomy", "borborygmi"] 
+    word_list = ["choledocholithiasis", "hyperhidrosis", "pneumoultramicroscopicsilicovolcanoconiosis", "oophorohysterectomy", "borborygmi"] # the rest of the lines serve the same purpose as easy_mode()
     guessed_letters = []
     word = random.choice(word_list)
     attempts = 10
