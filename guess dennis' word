@@ -31,13 +31,18 @@ def display_word():
     global hidden_word, attempts    # globalizes variables in the function
     print("current guesses: " + "".join(hidden_word))   # shows the user the hidden word as a single string
     time.sleep(0.5)
+    print(f"{attempts} incorrect guesses left")
     get_guess() 
+    update_dashes()
+     
+def update_dashes():
+    global attempts
     if guess in word:   # checks if the user's guess is in the word. if not it removes an attempt
         for i in range(len(word)):
             if word[i] == guess:    # this goes through each and every letter in the word and if any of the words match the guess, it replaces the dashed line with the letter at that point
                 hidden_word[i] = guess
     else:
-        attempts -= 1  
+        attempts -= 1 
     
 def get_guess():
     global guess, hints    # globalizes variables in the function
@@ -95,7 +100,6 @@ def play_game():
                 break
             else:
                 time.sleep(0.5) # if the word still has dashes, it repeats the while loop
-                print(f"number of bad guesses left: {attempts}")
                 print(f"used letters: {', '.join(guessed_letters)}\n")
 
         else:   # prints a message to tell the user they lost and tells them what it was
