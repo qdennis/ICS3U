@@ -1,3 +1,4 @@
+
 import random
 import time
 
@@ -91,7 +92,7 @@ def play_game():
         if attempts != 0:   # the code runs if the user has not reached the attempts threshold
             display_word()
             if '-' not in hidden_word:  # checks if the word has any dashes, if not the user wins
-                print("\nCONGRATS YOU GOT THE WORD !!!!\n")
+                print(f"\nCONGRATS YOU GOT THE WORD !!!! IT WAS {word}\n")
                 break
             else:
                 time.sleep(0.5) # if the word still has dashes, it repeats the while loop
