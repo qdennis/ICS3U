@@ -1,6 +1,8 @@
 import random
 import time
 
+hints = 1 # a variable that keeps track of hints
+
 def easy_mode():
     global guessed_letters, attempts, word, hidden_word # globalizes variables in the function
     word_list = ["pentagon", "pineapple", "pencil", "potato", "plane", "four", "wrist", "phone", "table", "wrapper"]    # word list for the code to choose from
@@ -37,8 +39,24 @@ def display_word():
         attempts -= 1  
     
 def get_guess():
-    global guess    # globalizes variable in the function
+    global guess, hints    # globalizes variables in the function
     while True:     # while loop ensures that the code runs indefinitely until the user types in a valid input
+        if hints == 1:
+            user_hint = input(f"would you like a hint (you have {hints} hint)? (yes/no): ") # a sectino of code that gives the user a hint
+            if user_hint == 'no':
+                pass
+            elif user_hint == 'yes':
+                for i in range(len(hidden_word)):
+                    if hidden_word[i] == '-':
+                        given_hint = word[i]    # if there is a blank on a specific spot in the word, the code uses the index from the hidden word on the originial word to retrieve the letter
+                        print(f'There is a "{given_hint}" in the word.')
+                        hints -= 1  # subtracts the hint after it has been used
+                        break
+            else:
+                print("please input a yes or no")
+                continue
+        else:   
+            pass
         guess = input("guess a letter: ")
         time.sleep(0.5)
         if len(guess) != 1: # if the string is longer than 1, it makes the user input another value
@@ -53,9 +71,10 @@ def get_guess():
             guessed_letters.append(guess)   # adds the gussed letter into the list 
             guessed_letters.sort()  # sorts the list alphabetically so that the user is able to determine which letters they have not guessed
             break
+    
 
 def play_game():
-    global attempts # globalizes variable in the function   
+    global attempts, hints # globalizes variable in the function   
     while True:
         difficulty = input("Would you like to play easy or difficult mode?: ")  # allows user to choose 2 difficulties
         print('') # spacing
@@ -88,9 +107,11 @@ def play_game():
         print('')
         if restart == 'yes':
             attempts = 10
+            hints = 1
             time.sleep(0.5)
             return play_game()
         elif restart == 'no':
+            print("bye bye :(")
             quit()
         else:   # if the user does not input a valid input
             print("im not too sure what you are saying. please type yes or no.")
