@@ -42,7 +42,7 @@ def get_guess():
     global guess, hints    # globalizes variables in the function
     while True:     # while loop ensures that the code runs indefinitely until the user types in a valid input
         if hints == 1:
-            user_hint = input(f"would you like a hint (you have {hints} hint)? (yes/no): ") # a sectino of code that gives the user a hint
+            user_hint = input(f"would you like a hint (you have {hints} hint)? (yes/no): ") # a section of code that gives the user a hint
             if user_hint == 'no':
                 pass
             elif user_hint == 'yes':
