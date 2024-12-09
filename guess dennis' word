@@ -42,23 +42,19 @@ def display_word():
 def get_guess():
     global guess, hints    # globalizes variables in the function
     while True:     # while loop ensures that the code runs indefinitely until the user types in a valid input
-        if hints == 1:
-            user_hint = input(f"would you like a hint (you have {hints} hint)? (yes/no): ") # a section of code that gives the user a hint
-            if user_hint == 'no':
-                pass
-            elif user_hint == 'yes':
+        guess = input("guess a letter: ")
+        if guess == 'hint': # if the user types in hint it gives user hint
+            if hints == 1:  # only works if user has used their hint
                 for i in range(len(hidden_word)):
                     if hidden_word[i] == '-':
                         given_hint = word[i]    # if there is a blank on a specific spot in the word, the code uses the index from the hidden word on the originial word to retrieve the letter
                         print(f'There is a "{given_hint}" in the word.')
                         hints -= 1  # subtracts the hint after it has been used
                         break
-            else:
-                print("please input a yes or no")
                 continue
-        else:   
-            pass
-        guess = input("guess a letter: ")
+            else:
+                print("you have no more hints")
+                continue
         time.sleep(0.5)
         if len(guess) != 1: # if the string is longer than 1, it makes the user input another value
             print("must be ONE letter\n")
@@ -80,10 +76,13 @@ def play_game():
         difficulty = input("Would you like to play easy or difficult mode?: ")  # allows user to choose 2 difficulties
         print('') # spacing
         time.sleep(0.5)
+        time.sleep(0.5)
         if difficulty.lower() == 'difficult':   # sends the user to the hard_mode() function
+            print("If you want a hint, type hint into the input. You are only given 1 hint")
             hard_mode()
             break
         elif difficulty.lower() == 'easy': # sends the user to the easy_mode() function
+            print("If you want a hint, type hint into the input. You are only given 1 hint")
             easy_mode()
             break
         else:
@@ -92,7 +91,7 @@ def play_game():
         if attempts != 0:   # the code runs if the user has not reached the attempts threshold
             display_word()
             if '-' not in hidden_word:  # checks if the word has any dashes, if not the user wins
-                print(f"\nCONGRATS YOU GOT THE WORD !!!! IT WAS {word}\n")
+                print(f"\nCONGRATS YOU GOT THE WORD !!!! IT WAS {word.upper()}\n")
                 break
             else:
                 time.sleep(0.5) # if the word still has dashes, it repeats the while loop
